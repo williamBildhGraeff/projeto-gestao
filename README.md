@@ -14,7 +14,7 @@ Pessoa {
 Item {
   id,
   Descrição,
-  Doador
+  Doador = PessoaId
 }
 
 PessoaItem {
