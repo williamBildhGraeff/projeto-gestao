@@ -25,5 +25,19 @@ PessoaItem {
   }
 }
 
+Usuario {
+  Id,
+  Nome,
+  Pessoa {
+    PessoaId,
+    nome,
+    cpf,
+    telefone,
+    endereço
+  },
+  Permissoes,
+  Imagem
+}
+
 
 
