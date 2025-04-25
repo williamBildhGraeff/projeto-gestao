@@ -1,13 +1,24 @@
 import Dashboard from '@/pages/views/Dashboard/Dashboard.vue';
 import LoginPage from '@/pages/views/Login/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
+import ResetPassword from '@/pages/views/ResetPassword/ResetPassword.vue';
 
 const routes = [
+  {
+    path: '/',
+    redirect:'/login'
+  },
   {
     path: '/login',
     name: 'Login',
     meta: { auth: false },
     component: LoginPage, 
+  },
+ {
+    name: 'RecuperarSenha',
+    path: '/reset-password',
+    component: ResetPassword,
+    auth: { meta: false }
   },
   {
     path: '/painel',
@@ -15,7 +26,6 @@ const routes = [
     meta: { auth: true },
     component: Dashboard,
     children: [
-
     ]
   }
 ]
