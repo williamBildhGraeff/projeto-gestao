@@ -19,7 +19,6 @@ export default {
     <v-card
       rounded
       class="mx-auto"
-      width="300"
     >
       <v-toolbar color="primary">
         <v-toolbar-title>
@@ -35,6 +34,7 @@ export default {
             >
               <v-text-field
                 v-model="data.firstName"
+                hide-details="auto"
                 variant="outlined"
                 label="First name"
               />
@@ -45,8 +45,18 @@ export default {
             >
               <v-text-field
                 v-model="data.lastName"
+                hide-details="auto"
                 variant="outlined"
                 label="Last name"
+              />
+            </v-col>
+            <v-col class="pa-1">
+              <v-btn
+                text="Esqueci minha senha!"
+                variant="tonal"
+                color="primary"
+                density="compact"
+                @click="$router.push('/reset-password')"
               />
             </v-col>
           </v-row>
@@ -55,9 +65,9 @@ export default {
       <v-card-actions>
         <v-spacer />
         <v-btn
-          variant="tonal"
+          variant="flat"
           prepend-icon="mdi-arrow-collapse-left"
-          text="Entrar"
+          text="Login"
           color="primary"
           @click="$router.push('/painel')"
         />
