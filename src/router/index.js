@@ -2,6 +2,7 @@ import Dashboard from '@/pages/views/Dashboard/Dashboard.vue';
 import LoginPage from '@/pages/views/Login/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import ResetPassword from '@/pages/views/ResetPassword/ResetPassword.vue';
+import CreateUser from '@/pages/views/CreateUser/CreateUser.vue';
 
 const routes = [
   {
@@ -15,9 +16,15 @@ const routes = [
     component: LoginPage, 
   },
  {
-    name: 'RecuperarSenha',
+    name: 'ResetPassword',
     path: '/reset-password',
     component: ResetPassword,
+    auth: { meta: false }
+  },
+   {
+    name: 'CreateUser',
+    path: '/create-user',
+    component: CreateUser,
     auth: { meta: false }
   },
   {

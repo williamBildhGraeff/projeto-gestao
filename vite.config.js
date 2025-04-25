@@ -11,6 +11,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  envPrefix: 'APP_',
   plugins: [
     VueRouter(),
     Vue({
