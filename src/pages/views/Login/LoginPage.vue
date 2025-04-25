@@ -50,13 +50,30 @@ export default {
                 label="Last name"
               />
             </v-col>
-            <v-col class="pa-1">
+            <v-col
+              cols="12"
+              class="pa-1  d-flex justify-center"
+            >
               <v-btn
                 text="Esqueci minha senha!"
                 variant="tonal"
                 color="primary"
+                class="w-100 "
                 density="compact"
                 @click="$router.push('/reset-password')"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              class="pa-1 d-flex justify-center"
+            >
+              <v-btn
+                text="Novo usuário"
+                variant="tonal"
+                color="red"
+                class="w-100 "
+                density="compact"
+                @click="$router.push('/create-user')"
               />
             </v-col>
           </v-row>
