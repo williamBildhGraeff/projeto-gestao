@@ -1,7 +1,7 @@
 <script>
-import Email from '@/components/ResetPassword/Email.vue';
-import NewPassword from '@/components/ResetPassword/NewPassword.vue';
-import VerificationCode from '@/components/ResetPassword/VerificationCode.vue';
+import Email from '@/components/reset-password/Email.vue';
+import NewPassword from '@/components/reset-password/NewPassword.vue';
+import VerificationCode from '@/components/reset-password/VerificationCode.vue';
 
 export default {
     name: 'ResetPassowrd',
@@ -27,17 +27,14 @@ export default {
 <template>
   <v-container
     fluid
+    class="h-100"
   >
-    <v-row>
-      <v-col class="pa-1">
-        <v-btn
-          text="Voltar"
-          prepend-icon="mdi-arrow-left"
-          @click="$router.push('/')"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
+    <v-btn
+      text="Voltar"
+      prepend-icon="mdi-arrow-left"
+      @click="$router.push('/login')"
+    />
+    <v-row class="fill-height d-flex justify-center align-center">
       <v-col class="pa-1">
         <v-card
           rounded
@@ -49,7 +46,7 @@ export default {
               Redefinição de senha!
             </v-toolbar-title>
           </v-toolbar>
-          <v-card-text>
+          <v-card-text class="pa-1">
             <v-stepper
               v-model="step"
               editable

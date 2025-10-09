@@ -1,14 +1,15 @@
-import Dashboard from '@/pages/views/Dashboard/Dashboard.vue';
-import LoginPage from '@/pages/views/Login/LoginPage.vue';
+import Dashboard from '@/views/pages/dashboard/Dashboard.vue';
+import LoginPage from '@/views/pages/login/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import ResetPassword from '@/pages/views/ResetPassword/ResetPassword.vue';
-import CreateUser from '@/pages/views/CreateUser/CreateUser.vue';
+import ResetPassword from '@/views/pages/reset-password/ResetPassword.vue';
+import CreateUser from '@/views/pages/create-user/CreateUser.vue';
+import Index from '@/views/index.vue';
+import donate from '@/router/modules/donate';
+import received from '@/router/modules/received';
+import stock from '@/router/modules/stock';
 
 const routes = [
-  {
-    path: '/',
-    redirect:'/login'
-  },
+
   {
     path: '/login',
     name: 'Login',
@@ -21,18 +22,27 @@ const routes = [
     component: ResetPassword,
     auth: { meta: false }
   },
-   {
+  {
     name: 'CreateUser',
     path: '/create-user',
     component: CreateUser,
     auth: { meta: false }
   },
   {
-    path: '/painel',
-    name: 'Painel',
+    path: '/',
+    redirect: '/painel',
     meta: { auth: true },
-    component: Dashboard,
+    component: Index,
     children: [
+      {
+        name: 'Painel',
+        path: '/painel',
+        component: Dashboard,
+        auth: { meta: true }
+      },
+      ...donate,
+      ...received,
+      ...stock
     ]
   }
 ]

@@ -23,32 +23,36 @@ export default {
 </script>
 
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col class="pa-1">
-        <v-btn
-          text="Voltar"
-          prepend-icon="mdi-arrow-left"
-          @click="$router.push('/')"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
+  <v-container
+    fluid
+    class="h-100"
+  >
+    <v-btn
+      text="Voltar"
+      prepend-icon="mdi-arrow-left"
+      @click="$router.push('/login')"
+    />
+    <v-row class="fill-height d-flex justify-center align-center">
       <v-col
         class="pa-1 "
       >
         <v-card 
           rounded
-          class="ma-auto"
+          class="mx-auto"
           max-width="600px"
-          title="Criar usuário"
         >
+          <v-toolbar color="primary">
+            <v-toolbar-title>
+              Criar usuário
+            </v-toolbar-title>
+          </v-toolbar>
           <v-card-text>
             <v-form>
               <v-row>
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="user.name"
@@ -60,6 +64,7 @@ export default {
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="user.email"
@@ -71,6 +76,7 @@ export default {
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="user.phone"
@@ -82,6 +88,7 @@ export default {
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="user.login"
@@ -93,6 +100,7 @@ export default {
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="user.password"
@@ -104,6 +112,7 @@ export default {
                 <v-col
                   cols="12"
                   md="6"
+                  class="pa-1"
                 >
                   <v-text-field
                     v-model="confirm_password"
