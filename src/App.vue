@@ -1,11 +1,12 @@
+<script>
+
+export default {
+
+}
+</script>
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-    </v-main>
+  <v-app class="d-print-none">
+    <router-view />
   </v-app>
 </template>
 
-<script setup>
-  //
-</script>
