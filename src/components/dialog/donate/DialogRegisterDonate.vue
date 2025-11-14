@@ -1,6 +1,14 @@
 <script>
+import donate from '@/api/donate';
+import SelectPeople from '@/components/selects/SelectPeople.vue';
+
 export default{
   name: 'DialogRegisterDonate',
+
+ components:{
+  SelectPeople
+ },
+
  props: {
   modelValue: {
    type: Boolean,
@@ -16,7 +24,7 @@ export default{
  emits: ['update:modelValue'],
 
  data: () => ({
-
+  donateFields: {}
  }),
 
  computed: {
@@ -32,6 +40,16 @@ export default{
 
   title(){
    return `${this.donate?.id ? 'Editar' : 'Cadastrar'} doação`
+  }
+ },
+
+ methods: {
+  async save(){
+    try {
+      await donate.insert(this.donateFields)
+    } catch (error) {
+      console.error(error)
+    }
   }
  }
 }
@@ -63,105 +81,20 @@ export default{
             md="6"
             class="pa-1"
           >
-            <v-select
-              density="compact"
-              variant="solo"
-              hide-details="auto"  
-              label="Pessoa"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhuma pessoa encontrada"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>  
-            </v-select>
+            <select-people v-model="donateFields.person" />
           </v-col>
           <v-col
             cols="12"
             md="6"
             class="pa-1"
           >
-            <v-select
+            <v-text-field
+              v-model="donateFields.item"
               density="compact"
-              variant="solo"
+              variant="outlined"
               hide-details="auto"
               label="Item"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhum item encontrado"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="pa-1"
-          >
-            <v-select
-              density="compact"
-              variant="solo"
-              hide-details="auto"
-              label="Unidade de medida"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhuma unidade de medida encontrada"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>
-            </v-select>
+            />
           </v-col>
           <v-col
             cols="12"
@@ -169,11 +102,12 @@ export default{
             class="pa-1"
           >
             <v-number-input
-              variant="solo"
+              v-model="donateFields.quantity"
+              variant="outlined"
               density="compact"
               control-variant="default"
               hide-details="auto"
-              label="Número"
+              label="Quantidade"
             />
           </v-col>
         </v-row>
@@ -185,6 +119,7 @@ export default{
           size="small"
           variant="tonal"
           color="success"
+          @click="save"
         />
       </v-card-actions>
     </v-card>

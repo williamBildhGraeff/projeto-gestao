@@ -1,4 +1,5 @@
 <script>
+import donate from '@/api/donate';
 import DialogRegisterDonate from '@/components/dialog/donate/DialogRegisterDonate.vue';
 
 export default {
@@ -6,53 +7,41 @@ export default {
   components: {
     DialogRegisterDonate
   },
- data: () => ({
-  dialogRegisterDonate: false,
-  donate: {},
- headers: [
-    {
-      title: 'Nome',
-      align: 'start',
-      sortable: false, 
-      key: 'name',
-    },
-    { title: 'Item', key: 'item', align: 'center' },
-    { title: 'Quantidade', key: 'qtde', align: 'center' },
-    { title: 'Data', key: 'date', align: 'center' }
-  ],
+  data: () => ({
+    dialogRegisterDonate: false,
+    donate: {},
+    headers: [
+      { title: '#', key: 'id' },
+      {
+        title: 'Pessoa',
+        key: 'person',
+      },
+      { title: 'Item', key: 'item'},
+      { title: 'Quantidade', key: 'quantity' },
+      { title: 'Data', key: 'date' }
+    ],
 
- items: [
-    {
-      name: 'Família Santos',
-      item: 'Cestas Básicas', 
-      qtde: 5,
-      date: '05/10/2025',
-    },
-    {
-      name: 'Escola Municipal Alegria',
-      item: 'Livros Didáticos', 
-      qtde: 40,
-      date: '06/10/2025'
-    },
-    {
-      name: 'Centro de Acolhimento Flores',
-      item: 'Kit de Higiene Pessoal',
-      qtde: 10,
-      date: '07/10/2025',
-      
-    },
-    {
-      name: 'Maria Lúcia Pires',
-      item: 'Agasalhos e Cobertores', 
-      qtde: 15,
-      date: '08/10/2025'
-    },
-  ]
- }),
+    donates: []
+  }),
 
  computed: {
   tableHeight(){
-    return `calc(100vh - 285px)`
+    return `calc(100vh - 190px)`
+  }
+ },
+
+ mounted(){
+    this.listDonates()
+ },
+
+ methods: {
+  async listDonates(){
+    try {
+      const response = await donate.list()
+      this.donates = response.data
+    } catch (error) {
+      console.log(error)
+    }
   }
  }
 }
@@ -79,7 +68,7 @@ export default {
       </v-col> 
     </v-row>
  
-    <v-row
+    <!-- <v-row
       class="pa-1"
       no-gutters
     >
@@ -145,9 +134,10 @@ export default {
           prepend-icon="mdi-magnify"
           color="primary"
           variant="flat"
+          @click="listDonates"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-sheet>
   <v-container
     fluid
@@ -161,8 +151,8 @@ export default {
         color="grey-darken-4"
         :height="tableHeight"
         :headers="headers"
-        :items="items"
-        :items-length="items.length"
+        :items="donates"
+        :items-length="donates.length"
         items-per-page-text="Doações por página"
         item-value="name"
       />
