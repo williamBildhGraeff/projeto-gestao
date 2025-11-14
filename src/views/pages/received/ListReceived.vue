@@ -1,4 +1,5 @@
 <script>
+import people from '@/api/people';
 import received from '@/api/received';
 import DialogRegisterReceive from '@/components/dialog/receive/DialogRegisterReceive.vue';
 
@@ -19,7 +20,7 @@ DialogRegisterReceive
     { title: 'Quantidade', key: 'quantity' },
     { title: 'Data', key: 'date' }
   ],
-
+  people: [],
   receiveds: []
  }),
 
@@ -30,6 +31,7 @@ DialogRegisterReceive
  },
 
  mounted(){
+  this.listPeople()
   this.listReceived()
  },
 
@@ -41,6 +43,20 @@ DialogRegisterReceive
     } catch (error) {
       console.error(error)
     }
+  },
+
+  getName(id){
+    let response = this.people.find(item => item.id == id)
+    return response?.name || ''
+  },
+
+  async listPeople(){
+    try {
+      let response = await people.list()
+      this.people = response.data
+    } catch (error) {
+      console.error(error)
+    }
   }
  }
 }
@@ -49,7 +65,7 @@ DialogRegisterReceive
 <template>
   <v-sheet
     elevation="5"
-    class="pt-2"
+    class="pa-0"
   >
     <v-row
       class="pa-1"
@@ -161,7 +177,14 @@ DialogRegisterReceive
         :items-length="receiveds.length"
         items-per-page-text="Recebimentos por página"
         item-value="name"
-      />
+      >
+        <template #[`item.person`]="{item}">
+          {{ getName(item.person) }}
+        </template>
+        <template #[`item.date`]="{item}">
+          {{ $formatDate.ptBr(item.date) }}
+        </template>
+      </v-data-table-server>
     </v-sheet>
   </v-container>
   <dialog-register-receive

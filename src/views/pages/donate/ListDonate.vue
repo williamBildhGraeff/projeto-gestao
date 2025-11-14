@@ -1,5 +1,6 @@
 <script>
 import donate from '@/api/donate';
+import people from '@/api/people';
 import DialogRegisterDonate from '@/components/dialog/donate/DialogRegisterDonate.vue';
 
 export default {
@@ -10,6 +11,7 @@ export default {
   data: () => ({
     dialogRegisterDonate: false,
     donate: {},
+    people: [],
     headers: [
       { title: '#', key: 'id' },
       {
@@ -31,6 +33,7 @@ export default {
  },
 
  mounted(){
+    this.listPeople()
     this.listDonates()
  },
 
@@ -41,6 +44,20 @@ export default {
       this.donates = response.data
     } catch (error) {
       console.log(error)
+    }
+  },
+
+  getName(id){
+    let response = this.people.find(item => item.id == id)
+    return response.name
+  },
+
+  async listPeople(){
+    try {
+      let response = await people.list()
+      this.people = response.data
+    } catch (error) {
+      console.error(error)
     }
   }
  }
@@ -155,7 +172,14 @@ export default {
         :items-length="donates.length"
         items-per-page-text="Doações por página"
         item-value="name"
-      />
+      >
+        <template #[`item.person`]="{item}">
+          {{ getName(item.person) }}
+        </template>
+        <template #[`item.date`]="{item}">
+          {{ $formatDate.ptBr(item.date) }}
+        </template>
+      </v-data-table-server>
     </v-sheet>
   </v-container>
   <dialog-register-donate
