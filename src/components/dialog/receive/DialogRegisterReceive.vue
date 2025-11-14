@@ -1,4 +1,6 @@
 <script>
+import received from '@/api/received';
+
 export default{
   name: 'DialogRegisterReceive',
   props: {
@@ -13,10 +15,11 @@ export default{
     }
  },
 
- emits: ['update:modelValue'],
+ emits: ['update:modelValue', 'list'],
 
  data: () => ({
-
+  receivedFields: {},
+  loading: false
  }),
 
  computed: {
@@ -33,6 +36,20 @@ export default{
   title(){
    return `${this.receive?.id ? 'Editar' : 'Cadastrar'} recebimento`
   }
+ },
+
+ methods: {
+  async save(){
+    try {
+      this.loading = true
+      await received.insert(this.receivedFields)
+      this.$emit('list')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loading = true
+    }
+  }
  }
 }
 </script>
@@ -47,6 +64,7 @@ export default{
       <v-toolbar
         color="primary"
         density="compact"
+        :loading
         :title="title"
       >
         <v-toolbar-items>
@@ -63,105 +81,20 @@ export default{
             md="6"
             class="pa-1"
           >
-            <v-select
-              density="compact"
-              variant="solo"
-              hide-details="auto"  
-              label="Pessoa"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhuma pessoa encontrada"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>  
-            </v-select>
+            <select-people v-model="receivedFields.person" />
           </v-col>
           <v-col
             cols="12"
             md="6"
             class="pa-1"
           >
-            <v-select
+            <v-text-field
+              v-model="receivedFields.item"
               density="compact"
-              variant="solo"
+              variant="outlined"
               hide-details="auto"
               label="Item"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhum item encontrado"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="pa-1"
-          >
-            <v-select
-              density="compact"
-              variant="solo"
-              hide-details="auto"
-              label="Unidade de medida"
-            >
-              <template #no-data>
-                <v-list-item
-                  density="compact"
-                  title="Nenhuma unidade de medida encontrada"
-                />
-              </template>
-              <template #append-item>
-                <v-divider />
-                <v-list-item
-                  density="compact"
-                >
-                  <v-btn
-                    variant="tonal"
-                    block
-                    color="info"
-                    size="small"
-                    text="Adicionar"
-                    prepend-icon="mdi-plus"
-                    @click="adicionarItem"
-                  />
-                </v-list-item>
-              </template>
-            </v-select>
+            />
           </v-col>
           <v-col
             cols="12"
@@ -169,11 +102,12 @@ export default{
             class="pa-1"
           >
             <v-number-input
-              variant="solo"
+              v-model="receivedFields.quantity"
+              variant="outlined"
               density="compact"
               control-variant="default"
               hide-details="auto"
-              label="Número"
+              label="Quantidade"
             />
           </v-col>
         </v-row>
@@ -185,6 +119,8 @@ export default{
           size="small"
           variant="tonal"
           color="success"
+          :loading
+          @click="save"
         />
       </v-card-actions>
     </v-card>

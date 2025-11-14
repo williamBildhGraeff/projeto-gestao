@@ -1,4 +1,5 @@
 <script>
+import received from '@/api/received';
 import DialogRegisterReceive from '@/components/dialog/receive/DialogRegisterReceive.vue';
 
 export default {
@@ -9,49 +10,37 @@ DialogRegisterReceive
  data: () => ({
   dialogRegisterReceive: false,
  headers: [
+  { title: '#', key: 'id' },
     {
-      title: 'Nome',
-      align: 'start',
-      sortable: false, 
-      key: 'name',
+      title: 'Pessoa',
+      key: 'person',
     },
-    { title: 'Item', key: 'item', align: 'center' },
-    { title: 'Quantidade', key: 'qtde', align: 'center' },
-    { title: 'Data', key: 'date', align: 'center' }
+    { title: 'Item', key: 'item' },
+    { title: 'Quantidade', key: 'quantity' },
+    { title: 'Data', key: 'date' }
   ],
 
- items: [
-    {
-      name: 'Helena Ribeiro',
-      item: 'Cestas Básicas',
-      qtde: 15,
-      date: '01/10/2025',
-     
-    },
-    {
-      name: 'José Amaro',
-      item: 'Livros Didáticos',
-      qtde: 80,
-      date: '02/10/2025',
-    },
-    {
-      name: 'Carla Nunes',
-      item: 'Kit de Higiene Pessoal',
-      qtde: 25,
-      date: '03/10/2025',
-    },
-    {
-      name: 'Rafaela Borges',
-      item: 'Agasalhos e Cobertores',
-      qtde: 55,
-      date: '04/10/2025',
-    }
-  ]
+  receiveds: []
  }),
 
  computed: {
   tableHeight(){
-    return `calc(100vh - 300px)`
+    return `calc(100vh - 190px)`
+  }
+ },
+
+ mounted(){
+  this.listReceived()
+ },
+
+ methods: {
+  async listReceived(){
+    try {
+      let response = await received.list()
+      this.receiveds = response.data
+    } catch (error) {
+      console.error(error)
+    }
   }
  }
 }
@@ -78,7 +67,7 @@ DialogRegisterReceive
       </v-col> 
     </v-row>
  
-    <v-row
+    <!-- <v-row
       class="pa-1"
       no-gutters
     >
@@ -156,7 +145,7 @@ DialogRegisterReceive
           variant="flat"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-sheet>
   <v-container fluid>
     <v-sheet 
@@ -168,8 +157,8 @@ DialogRegisterReceive
         color="grey-darken-4"
         :height="tableHeight"
         :headers="headers"
-        :items="items"
-        :items-length="items.length"
+        :items="receiveds"
+        :items-length="receiveds.length"
         items-per-page-text="Recebimentos por página"
         item-value="name"
       />
@@ -178,5 +167,6 @@ DialogRegisterReceive
   <dialog-register-receive
     v-model="dialogRegisterReceive"
     :receive
+    @list="listReceived"
   />
 </template>
