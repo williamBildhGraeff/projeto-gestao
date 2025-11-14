@@ -1,7 +1,13 @@
 <script>
 import peopleApi from '@/api/people';
+import DialogPerson from '../dialog/person/DialogPerson.vue';
 
 export default{
+
+  components: {
+    DialogPerson
+  },
+
  props: {
   modelValue: {
    type: Number,
@@ -12,7 +18,9 @@ export default{
  emits: ['update:modelValue'],
 
  data: () => ({
-  people: []
+  people: [],
+  person: {},
+  dialogPerson: false
  }),
 
  computed: {
@@ -39,7 +47,26 @@ export default{
    } catch (error) {
     console.error(error)
    }
-  }
+  },
+
+  editPeople(item){
+    this.person = item
+    this.dialogPerson = true
+  },
+
+  adicionarItem(){
+    this.person = { type_person: 'PF'}
+    this.dialogPerson = true
+  },
+
+  async deletePerson(item){
+      try {
+        await peopleApi.delete(item.id)
+        this.getPeople()
+      } catch (error) {
+        console.error(error)
+      }
+    }
  }
 }
 </script>
@@ -54,13 +81,42 @@ export default{
     hide-details="auto"  
     label="Pessoa"
   >
+    <template #item="{ item, props }">
+      <v-list-item
+        variant="text"
+        v-bind="props"
+        :title="item?.raw?.name"
+      >
+        <template #append>
+          <v-btn
+            v-tooltip="'Editar pessoa'"
+            class="me-2"
+            rounded
+            color="primary"
+            icon="mdi-pen"
+            size="x-small"
+            variant="tonal"
+            @click.stop="editPeople(item.raw)"
+          />
+          <v-btn
+            v-tooltip="'Deletar pessoa'"
+            rounded
+            color="error"
+            icon="mdi-delete"
+            size="x-small"
+            variant="tonal"
+            @click.stop="deletePerson(item.raw)"
+          />
+        </template>
+      </v-list-item>
+    </template>
     <template #no-data>
       <v-list-item
         density="compact"
         title="Nenhuma pessoa encontrada"
       />
     </template>
-    <!-- <template #append-item>
+    <template #append-item>
       <v-divider />
       <v-list-item
         density="compact"
@@ -75,6 +131,11 @@ export default{
           @click="adicionarItem"
         />
       </v-list-item>
-    </template>   -->
+    </template>  
   </v-select>
+  <dialog-person
+    v-model="dialogPerson"
+    :person
+    @list="getPeople"
+  />
 </template>

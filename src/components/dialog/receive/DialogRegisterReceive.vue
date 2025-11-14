@@ -79,14 +79,14 @@ export default{
           <v-col
             cols="12"
             md="6"
-            class="pa-1"
+            class="pa-2"
           >
             <select-people v-model="receivedFields.person" />
           </v-col>
           <v-col
             cols="12"
             md="6"
-            class="pa-1"
+            class="pa-2"
           >
             <v-text-field
               v-model="receivedFields.item"
@@ -99,7 +99,7 @@ export default{
           <v-col
             cols="12"
             md="6"
-            class="pa-1"
+            class="pa-2"
           >
             <v-number-input
               v-model="receivedFields.quantity"
