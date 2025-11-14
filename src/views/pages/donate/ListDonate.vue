@@ -1,5 +1,6 @@
 <script>
 import donate from '@/api/donate';
+import item from '@/api/item';
 import people from '@/api/people';
 import DialogRegisterDonate from '@/components/dialog/donate/DialogRegisterDonate.vue';
 
@@ -16,14 +17,15 @@ export default {
       { title: '#', key: 'id' },
       {
         title: 'Pessoa',
-        key: 'person',
+        key: 'person_id',
       },
-      { title: 'Item', key: 'item'},
+      { title: 'Item', key: 'item_id'},
       { title: 'Quantidade', key: 'quantity' },
       { title: 'Data', key: 'date' }
     ],
 
-    donates: []
+    donates: [],
+    items: []
   }),
 
  computed: {
@@ -34,6 +36,7 @@ export default {
 
  mounted(){
     this.listPeople()
+    this.listItems()
     this.listDonates()
  },
 
@@ -47,15 +50,29 @@ export default {
     }
   },
 
-  getName(id){
+ getNamePerson(id){
     let response = this.people.find(item => item.id == id)
-    return response.name
+    return response?.name || ''
+  },
+
+  getNameItem(id){
+    let response = this.items.find(item => item.id == id)
+    return response?.name || ''
   },
 
   async listPeople(){
     try {
       let response = await people.list()
       this.people = response.data
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+  async listItems(){
+    try {
+      let response = await item.list()
+      this.items = response.data
     } catch (error) {
       console.error(error)
     }
@@ -173,8 +190,11 @@ export default {
         items-per-page-text="Doações por página"
         item-value="name"
       >
-        <template #[`item.person`]="{item}">
-          {{ getName(item.person) }}
+        <template #[`item.person_id`]="{item}">
+          {{ getNamePerson(item.person_id) }}
+        </template>
+        <template #[`item.item_id`]="{item}">
+          {{ getNameItem(item.item_id) }}
         </template>
         <template #[`item.date`]="{item}">
           {{ $formatDate.ptBr(item.date) }}

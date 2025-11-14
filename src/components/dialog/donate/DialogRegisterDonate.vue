@@ -1,12 +1,15 @@
 <script>
 import donate from '@/api/donate';
 import SelectPeople from '@/components/selects/SelectPeople.vue';
+import SelectItem from '@/components/selects/SelectItem.vue';
+import item from '@/api/item';
 
 export default{
   name: 'DialogRegisterDonate',
 
  components:{
-  SelectPeople
+  SelectPeople,
+  SelectItem
  },
 
  props: {
@@ -40,13 +43,35 @@ export default{
 
   title(){
    return `${this.donate?.id ? 'Editar' : 'Cadastrar'} doação`
+  },
+
+  maxQuantity(){
+    return this.getQuantityItem(this.donateFields.item_id)
   }
+ },
+
+ mounted(){
+  this.listItems()
  },
 
  methods: {
   async save(){
     try {
       await donate.insert(this.donateFields)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+  getQuantityItem(id){
+    let response = this.items.find(item => item.id == id)
+    return response?.quantity || null
+  },
+
+  async listItems(){
+    try {
+      let response = await item.list()
+      this.items = response.data
     } catch (error) {
       console.error(error)
     }
@@ -60,6 +85,7 @@ export default{
     v-model="value"
     persistent
     max-width="600"
+    @after-leave="donateFields = {}"
   >
     <v-card>
       <v-toolbar
@@ -88,13 +114,7 @@ export default{
             md="6"
             class="pa-2"
           >
-            <v-text-field
-              v-model="donateFields.item"
-              density="compact"
-              variant="outlined"
-              hide-details="auto"
-              label="Item"
-            />
+            <select-item v-model="donateFields.item_id" />
           </v-col>
           <v-col
             cols="12"
@@ -104,11 +124,25 @@ export default{
             <v-number-input
               v-model="donateFields.quantity"
               variant="outlined"
+              :max="maxQuantity"
+              :min="1"
               density="compact"
               control-variant="default"
               hide-details="auto"
               label="Quantidade"
             />
+          </v-col>
+          <v-col
+            cols="12"
+            md="6"
+            class="pa-2"
+          >
+            <v-chip
+              rounded
+              color="info"
+            >
+              Quantidade de itens no estoque {{ maxQuantity || '' }}
+            </v-chip>  
           </v-col>
         </v-row>
       </v-card-text>

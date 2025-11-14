@@ -1,4 +1,5 @@
 <script>
+import item from '@/api/item';
 import people from '@/api/people';
 import received from '@/api/received';
 import DialogRegisterReceive from '@/components/dialog/receive/DialogRegisterReceive.vue';
@@ -14,14 +15,15 @@ DialogRegisterReceive
   { title: '#', key: 'id' },
     {
       title: 'Pessoa',
-      key: 'person',
+      key: 'person_id',
     },
-    { title: 'Item', key: 'item' },
+    { title: 'Item', key: 'item_id' },
     { title: 'Quantidade', key: 'quantity' },
     { title: 'Data', key: 'date' }
   ],
   people: [],
-  receiveds: []
+  receiveds: [],
+  items: []
  }),
 
  computed: {
@@ -32,6 +34,7 @@ DialogRegisterReceive
 
  mounted(){
   this.listPeople()
+  this.listItems()
   this.listReceived()
  },
 
@@ -45,8 +48,13 @@ DialogRegisterReceive
     }
   },
 
-  getName(id){
+  getNamePerson(id){
     let response = this.people.find(item => item.id == id)
+    return response?.name || ''
+  },
+
+  getNameItem(id){
+    let response = this.items.find(item => item.id == id)
     return response?.name || ''
   },
 
@@ -54,6 +62,15 @@ DialogRegisterReceive
     try {
       let response = await people.list()
       this.people = response.data
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+   async listItems(){
+    try {
+      let response = await item.list()
+      this.items = response.data
     } catch (error) {
       console.error(error)
     }
@@ -178,8 +195,11 @@ DialogRegisterReceive
         items-per-page-text="Recebimentos por página"
         item-value="name"
       >
-        <template #[`item.person`]="{item}">
-          {{ getName(item.person) }}
+        <template #[`item.person_id`]="{item}">
+          {{ getNamePerson(item.person_id) }}
+        </template>
+        <template #[`item.item_id`]="{item}">
+          {{ getNameItem(item.item_id) }}
         </template>
         <template #[`item.date`]="{item}">
           {{ $formatDate.ptBr(item.date) }}

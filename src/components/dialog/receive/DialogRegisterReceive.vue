@@ -1,8 +1,15 @@
 <script>
 import received from '@/api/received';
+import SelectPeople from '@/components/selects/SelectPeople.vue';
+import SelectItem from '@/components/selects/SelectItem.vue';
 
 export default{
   name: 'DialogRegisterReceive',
+
+  components:{
+  SelectPeople,
+  SelectItem
+ },
   props: {
     modelValue: {
     type: Boolean,
@@ -19,7 +26,8 @@ export default{
 
  data: () => ({
   receivedFields: {},
-  loading: false
+  loading: false,
+  items: []
  }),
 
  computed: {
@@ -35,7 +43,7 @@ export default{
 
   title(){
    return `${this.receive?.id ? 'Editar' : 'Cadastrar'} recebimento`
-  }
+  },
  },
 
  methods: {
@@ -59,6 +67,7 @@ export default{
     v-model="value"
     persistent
     max-width="600"
+    @after-enter="receivedFields = {}"
   >
     <v-card>
       <v-toolbar
@@ -88,13 +97,7 @@ export default{
             md="6"
             class="pa-2"
           >
-            <v-text-field
-              v-model="receivedFields.item"
-              density="compact"
-              variant="outlined"
-              hide-details="auto"
-              label="Item"
-            />
+            <select-item v-model="receivedFields.item_id" />
           </v-col>
           <v-col
             cols="12"
@@ -105,6 +108,7 @@ export default{
               v-model="receivedFields.quantity"
               variant="outlined"
               density="compact"
+              :min="1"
               control-variant="default"
               hide-details="auto"
               label="Quantidade"
