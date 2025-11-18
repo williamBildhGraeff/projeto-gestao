@@ -55,7 +55,7 @@ export default{
     } catch (error) {
       console.error(error)
     } finally {
-      this.loading = true
+      this.loading = false
     }
   }
  }
@@ -90,7 +90,7 @@ export default{
             md="6"
             class="pa-2"
           >
-            <select-people v-model="receivedFields.person" />
+            <select-people v-model="receivedFields.person_id" />
           </v-col>
           <v-col
             cols="12"

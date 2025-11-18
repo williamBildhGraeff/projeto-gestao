@@ -1,4 +1,3 @@
-import Dashboard from '@/views/pages/dashboard/Dashboard.vue';
 import LoginPage from '@/views/pages/login/LoginPage.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import ResetPassword from '@/views/pages/reset-password/ResetPassword.vue';
@@ -30,16 +29,10 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/painel',
+    redirect: '/doacoes',
     meta: { auth: true },
     component: Index,
     children: [
-      {
-        name: 'Painel',
-        path: '/painel',
-        component: Dashboard,
-        auth: { meta: true }
-      },
       ...donate,
       ...received,
       ...stock

@@ -86,7 +86,7 @@ export default {
           prepend-icon="mdi-arrow-collapse-left"
           text="Login"
           color="primary"
-          @click="$router.push('/painel')"
+          @click="$router.push('/doacoes')"
         />
       </v-card-actions>
     </v-card>

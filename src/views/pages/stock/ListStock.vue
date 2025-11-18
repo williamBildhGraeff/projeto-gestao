@@ -1,57 +1,51 @@
 <script>
-import DialogRegisterReceive from '@/components/dialog/receive/DialogRegisterReceive.vue';
+import item from '@/api/item';
+import stock from '@/api/stock';
 
 export default {
-  components: {
-DialogRegisterReceive
-  },
   
  data: () => ({
   dialogRegisterReceive: false,
  headers: [
-    { title: 'Item', key: 'item', align: 'start' },
-    { title: 'Quantidade', key: 'qtde', align: 'center' },
-    { title: 'Localização', key: 'localizacao', align: 'center' }
+    { title: 'Item', key: 'item_name' },
+    { title: 'Recebidos', key: 'total_received' },
+    { title: 'Doados', key: 'total_donated' },
+    { title: 'Estoque', key: 'estoque' }
   ],
 
- items: [
-    {
-      item: 'Cestas Básicas',
-      qtde: 10,
-      localizacao: 'Depósito',
-    },
-    {
-      item: 'Livros Didáticos',
-      qtde: 40,
-      localizacao: 'Depósito',
-    },
-    {
-      item: 'Kit de Higiene Pessoal',
-      qtde: 15,
-      localizacao: 'Depósito',
-    },
-    {
-      item: 'Agasalhos e Cobertores',
-      qtde: 40,
-      localizacao: 'Depósito',
-    },
-  ]
+  stockItems: []
  }),
 
  computed: {
   tableHeight(){
-    return `calc(100vh - 255px)`
+    return `calc(100vh - 144px)`
   }
- }
+ },
+
+  mounted(){
+    this.listStock()
+  },
+
+ methods: {
+
+   async listStock(){
+     try {
+       let response = await stock.list()
+       this.stockItems = response.data
+      } catch (error) {
+        console.error(error)
+      }
+    },
+  }
 }
 </script>
 
 <template>
-  <v-sheet
+  <!-- <v-sheet
     elevation="5"
     class="pt-2"
-  >
-    <v-row
+  > -->
+  <!-- <v-row
       class="pa-1"
       no-gutters
     >
@@ -129,8 +123,8 @@ DialogRegisterReceive
           variant="flat"
         />
       </v-col>
-    </v-row>
-  </v-sheet>
+    </v-row> -->
+  <!-- </v-sheet> -->
   <v-container fluid>
     <v-sheet 
       border="rounded"
@@ -141,15 +135,11 @@ DialogRegisterReceive
         :height="tableHeight"
         color="grey-darken-4"
         :headers="headers"
-        :items="items"
-        :items-length="items.length"
+        :items="stockItems"
+        :items-length="stockItems.length"
         items-per-page-text="Itens por página"
         item-value="name"
       />
     </v-sheet>
   </v-container>
-  <dialog-register-receive
-    v-model="dialogRegisterReceive"
-    :receive
-  />
 </template>
