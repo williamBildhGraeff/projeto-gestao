@@ -2,7 +2,7 @@
 import donate from '@/api/donate';
 import SelectPeople from '@/components/selects/SelectPeople.vue';
 import SelectItem from '@/components/selects/SelectItem.vue';
-import item from '@/api/item';
+import stock from '@/api/stock';
 
 export default{
   name: 'DialogRegisterDonate',
@@ -64,15 +64,16 @@ export default{
   },
 
   getQuantityItem(id){
-    let response = this.items.find(item => item.id == id)
-    return response?.quantity || null
+    if(!id) return
+    let response = this.items.find(item => item.item_id == id)
+    return response?.estoque || null
   },
 
   async listItems(){
     try {
-      let response = await item.list()
+      let response = await stock.list()
       this.items = response.data
-    } catch (error) {
+    } catch (error) { 
       console.error(error)
     }
   }
@@ -114,7 +115,10 @@ export default{
             md="6"
             class="pa-2"
           >
-            <select-item v-model="donateFields.item_id" />
+            <select-item
+              v-model="donateFields.item_id"
+              @update:model-value="donateFields.quantity = null"
+            />
           </v-col>
           <v-col
             cols="12"
